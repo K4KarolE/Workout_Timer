@@ -1,0 +1,119 @@
+﻿@page "/"
+@rendermode InteractiveServer
+
+
+<PageTitle>Workout Timer - Stopwatch</PageTitle>
+
+
+
+<div style="text-align: center;">
+
+    <div class="action-buttons-row">
+        <button class="btn btn-primary" @onclick="StartPauseStopWatch">@start_pause_btn_text</button>
+        <button class="btn btn-primary" @onclick="ResetStopWatch">Reset</button>
+        <button class="btn btn-primary" @onclick="LapClicked">Lap</button>
+    </div>
+    <div class="stopwatch">@currentTime</div>
+    <div class="lap-container">      
+        <div class="lap" style="display: @lapVisibility;">
+            <div class="lap-lead">
+                <div class="lap-text">Lap</div>
+                <div class="lap-text">Time</div>
+            </div
+                @if (isLapClicked)
+                {
+                    @for (int i = @lapTimesDic.Count; i > 0; i--)
+                    {   
+                        <div class="lap-row">
+                            <div class="lap-text">Lap @(i)</div>
+                            @try {
+                                <div class="lap-text">@lapTimesDic[i-1]</div>
+                            }
+                            catch (KeyNotFoundException) 
+                            {
+                                <div class="lap-text">Error occurred</div>
+                            }
+                        </div>
+                    }
+                }
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+
+    // STOPWATCH
+    private bool isStopwatchRunning = false;
+
+    private static string start_pause_btn_text = "Start";
+
+    private static string startPositionSW = "00:00.0";
+    private string currentTime = startPositionSW;
+    private System.Diagnostics.Stopwatch stopWatch = new System.Diagnostics.Stopwatch();
+
+
+    ///  LAPS
+    private Dictionary<int, string> lapTimesDic = new Dictionary<int, string>();
+    private string lapVisibility = "none";
+
+    private bool isLapClicked = false;
+
+    private string ?lapTime;
+
+    private int lapCounter = 0;
+
+
+
+    private async Task StartPauseStopWatch()
+    {      
+        if (isStopwatchRunning)
+        {   
+            isStopwatchRunning = false;
+            stopWatch.Stop();
+            start_pause_btn_text = "Start";
+        }
+        else
+        {   
+            isStopwatchRunning = true;
+            stopWatch.Start();
+            start_pause_btn_text = "Pause";
+            while (isStopwatchRunning)
+            {
+            TimeSpan ts = stopWatch.Elapsed;
+            currentTime = String.Format("{0:00}:{1:00}.{2:0}",
+            ts.Minutes, ts.Seconds,
+            ts.Milliseconds / 100);
+            StateHasChanged();
+            await Task.Delay(100);
+            }
+        }
+    }
+
+    private void ResetStopWatch()
+    {   
+        /// STOPWATCH
+        isStopwatchRunning = false;
+        stopWatch.Reset();
+        currentTime = startPositionSW;
+        start_pause_btn_text = "Start";
+        
+        /// LAPS
+        lapVisibility = "none";
+        lapCounter = 0;
+        lapTimesDic.Clear();
+    }
+
+    private void LapClicked()
+    {   
+        if (isStopwatchRunning)
+        {
+        isLapClicked = true;
+        lapVisibility = "block";
+        lapTime = currentTime;
+        lapTimesDic[lapCounter] = lapTime;
+        lapCounter++;
+        }
+    }
+}
