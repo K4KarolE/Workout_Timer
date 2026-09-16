@@ -47,7 +47,11 @@
     // STOPWATCH
     private bool isStopwatchRunning = false;
 
-    private static string start_pause_btn_text = "Start";
+    @* static keyword removed 
+        >> stopwatch started + switch timer type + back to stopwatch
+        >> "start_pause_btn_text" value back on the default "Start"
+    *@
+    private string start_pause_btn_text = "Start";
 
     private static string startPositionSW = "00:00.0";
     private string currentTime = startPositionSW;

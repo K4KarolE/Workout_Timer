@@ -1,18 +1,11 @@
 ﻿@inherits LayoutComponentBase
+@using BlazorApp.Components.Pages
 
 <div class="page">
-    @* <div class="sidebar">
-        <NavMenu />
-    </div> *@
-
     <main>
         <div class="top-row">
-      
-                <NavLink class="nav-link" href="/">Stopwatch</NavLink>
-                <div class="top_row_sep">|</div>
-                <NavLink class="nav-link">Timer</NavLink>
-                <div class="top_row_sep">|</div>
-                <NavLink class="nav-link">Interval</NavLink>
+
+            <TimerDecider />
 
         </div>
 

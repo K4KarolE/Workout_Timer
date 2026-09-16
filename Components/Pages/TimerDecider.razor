@@ -1,0 +1,51 @@
+﻿@rendermode InteractiveServer
+
+@* Used in the MainLayout.razor to able to dynamically update colors of the navigation links
+
+   Can not use "@rendermode InteractiveServer" import in the MainLayout.razor page
+*@
+
+@* To be able to use dynamic updates like /style="color: @colorDic[0];/ below, 
+    it has to be in a separate component, otherwise it will not work
+
+    It can not be in the "NavLink" component
+*@
+
+    <div style="color: @colorDic[0];">
+        <NavLink class="nav-link" href="/" @onclick="() => updateNavLinkColor(0)">Stopwatch</NavLink>
+    </div>
+
+        <div class="top_row_sep">|</div>
+
+    <div style="color: @colorDic[1];">
+        <NavLink class="nav-link" href="/basicTimer" @onclick="() => updateNavLinkColor(1)">Timer</NavLink>
+    </div>
+
+        <div class="top_row_sep">|</div>
+
+    <div style="color: @colorDic[2];">
+        <NavLink class="nav-link" href="/interval" @onclick="() => updateNavLinkColor(2)">Interval</NavLink>
+    </div>
+
+
+@code{
+    private Dictionary<int, string> colorDic = new ()
+    {
+        { 0, "#3a3a3a" },
+        { 1, "#ffffff" },
+        { 2, "#ffffff" }
+    };
+
+    private void updateNavLinkColor(int timerIndex)
+    {
+        colorDic[timerIndex] = "#3a3a3a";
+
+        List<int> indexList = [.. colorDic.Keys];
+        indexList.Remove(timerIndex);
+        
+        foreach (int i in indexList)
+        {
+            colorDic[i] = "#ffffff";
+        }
+    }
+}

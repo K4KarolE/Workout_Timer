@@ -22,7 +22,7 @@ main {
     gap: 30px;
 }
 
-.top_row_sep{
+::deep .top_row_sep{
     color: #3a3a3a;
     font-weight: 900;
     font-size: 30px;
